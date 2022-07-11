@@ -77,17 +77,7 @@ echo "版本：${os_version}"
 
 install_base() {
     if [[ x"${release}" == x"centos" ]]; then
-        yum -y install wget curl ca-certificates ntpdate
-	    timedatectl set-timezone Asia/Shanghai
-	    ntpdate ntp1.aliyun.com
-	    systemctl disable firewalld
-		systemctl stop firewalld
-		yum install -y yum-utils
-		yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-		yum install docker-ce docker-ce-cli containerd.io -y
-		systemctl start docker
-		systemctl enable docker
-		curl -fsSL https://get.docker.com | bash -s docker
+		curl -fsSL https://get.docker.com | bash -s docker --mirror Aliyun
 		curl -L "https://github.com/docker/compose/releases/download/1.26.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 		chmod +x /usr/local/bin/docker-compose
     else
@@ -108,6 +98,7 @@ echo '  branch = master' >> .gitmodules
 git submodule update --remote
 dc up -d
 dc exec www bash
+sleep 2
 sh init.sh
 php artisan horizon:publish
 echo -e "${green}安裝完畢${plain}"
