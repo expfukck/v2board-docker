@@ -74,8 +74,10 @@ elif [[ x"${release}" == x"debian" ]]; then
 fi
 
 echo "版本：${os_version}"
-
+# 从接收信息后开始统计脚本执行时间
+START_TIME=`date +%s`
 install_base() {
+
     if [[ x"${release}" == x"centos" ]]; then
 		curl -fsSL https://get.docker.com | bash -s docker --mirror Aliyun
 		curl -L "https://github.com/docker/compose/releases/download/1.26.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
@@ -97,11 +99,15 @@ git submodule update --init
 echo '  branch = master' >> .gitmodules
 git submodule update --remote
 dc up -d
+# V2Board安装完成时间统计
+END_TIME=`date +%s`
+EXECUTING_TIME=`expr $END_TIME - $START_TIME`
+echo -e "\033[36m本次安装使用了$EXECUTING_TIME S!\033[0m"
+echo -e "${green}请自行修改caddy.conf${plain}"
+echo -e "${green}安装命令sh init.sh${plain}"
+echo -e "${green}安装完毕请更新 php artisan horizon:publish${plain}"
 dc exec www bash
-sleep 2
-sh init.sh
-php artisan horizon:publish
-echo -e "${green}安裝完畢${plain}"
+
 }
 echo -e "${green}开始安装${plain}"
 install_base
