@@ -107,13 +107,19 @@ install_base() {
 }
 
 install_v2board() {
+rm -rf `which dc`
+ln -s /usr/local/bin/docker-compose /usr/bin/dc
 git clone https://github.com/expfukck/v2board-docker.git
 mv v2board-docker v2b
 cd v2b/
 git submodule update --init
 echo '  branch = master' >> .gitmodules
 git submodule update --remote
-docker-compose up -d
+dc up -d
+dc exec www bash
+sh init.sh
+php artisan horizon:publish
+echo -e "${green}安裝完畢${plain}"
 }
 echo -e "${green}开始安装${plain}"
 install_base
