@@ -34,7 +34,7 @@ __     ______  ____                      _
 一切就绪
 访问 http(s)://你的站点/admin 进入管理面板
 ```
-## #更新最新horizon(需要进入容器)
+## 更新最新horizon(需要进入容器)
 ```
 php artisan horizon:publish
 ```
